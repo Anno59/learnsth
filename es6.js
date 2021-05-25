@@ -68,3 +68,57 @@ class Foo {
 var foo1 = new Foo(10);
 foo1.h = "1";
 console.log(foo1.h); // 110test
+
+
+// ===========================
+let methodName = 'get';
+
+class Square {
+  [methodName](){
+  }
+}
+
+Square.prototype // {constructor: ƒ, get: ƒ}
+
+let methodName = class Square {
+
+  test(){
+    return Square.name;
+  }
+}
+
+let a = new methodName;
+console.log(a.test())
+console.log(Square.name);
+Square.prototype // {constructor: ƒ, get: ƒ}
+
+
+const MyClass = class Me {
+  getClassName() {
+    return Me.name;
+  }
+};
+let inst = new MyClass();
+inst.getClassName() // Me
+Me.name // error
+
+// 立即执行类
+let person = new class{
+  constructor(name) {
+    this.name = name;
+  }
+  say(){
+    console.log(this.name);
+  }
+}('test')
+
+person.say() // 'person'
+
+new foo();
+class foo{} // not defined
+
+
+
+
+
+
