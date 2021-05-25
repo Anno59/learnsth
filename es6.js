@@ -115,5 +115,5 @@ let person = new class{
 person.say() // 'person'
 
 new foo();
-class foo{} // not defined
+class foo{} // not defined.
 
