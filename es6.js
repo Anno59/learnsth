@@ -117,8 +117,3 @@ person.say() // 'person'
 new foo();
 class foo{} // not defined
 
-
-
-
-
-
