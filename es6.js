@@ -117,3 +117,48 @@ person.say() // 'person'
 new foo();
 class foo{} // not defined.
 
+// 类相当于原型的实例
+class a{
+  static b(){
+    console.log('1')
+  }
+}
+
+a.b();
+
+var c = new a();
+c.b(); // Uncaught TypeError: c.b is not a function
+
+
+// 类的静态方法与普通方法可以重名；静态方法中的 this 指向类本身
+class a{
+  static b(){
+    this.d();
+  }
+  static d(){
+    console.log(this) // class a
+  }
+  b(){
+    console.log('2')
+  }
+}
+a.b(); // 1
+var c = new a();
+c.b(); // 2
+
+// 类的实例属性的另一种定义方式
+let a = new class foo{
+  a = 1; // 与类中其它方法处于同一层级，不需要加 this 关键字
+  get value(){
+    return this.a;
+  }
+}();
+
+a.value // 1
+
+class foo{
+  static a = 1; // 静态属性
+}
+
+foo.a // 1
+
