@@ -162,3 +162,32 @@ class foo{
 
 foo.a // 1
 
+// 私有属性，只能在类的内部使用
+class foo{
+  #baz = 1;
+
+  get value(){
+    console.log(this.#baz);
+  }
+}
+
+var boo = new foo();
+boo.#baz;  // error
+boo.value; // 1
+
+// 用 extend 实现的继承，子类可以取到父类的私有属性
+
+// new.target 返回被 new 出的构造函数
+class Foo{
+  constructor() {
+    console.log(new.target === Foo)
+  }
+}
+
+class Baz extends Foo{
+  constructor() {
+    super()
+  }
+}
+
+new Baz() // false 返回的为子类
