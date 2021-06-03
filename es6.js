@@ -191,3 +191,32 @@ class Baz extends Foo{
 }
 
 new Baz() // false 返回的为子类
+
+// 继承先将父类属性与方法赋予 this，再将属性及方法赋予 this
+class ColorPoint extends Point {
+  constructor(x, y, color) {
+    super(x, y); // 调用父类的constructor(x, y), 必须在 this 前执行
+    this.color = color;
+  }
+
+  toString() {
+    return this.color + ' ' + super.toString(); // 调用父类的toString()
+  }
+}
+
+// 静态属性不能被实例继承，但能被子类继承
+
+// Object.getPrototypeOf方法可以用来从子类上获取父类
+Object.getPrototypeOf(Foo) === Baz // true baz 为 foo 的父类
+
+// super
+class A extends B{
+  constructor(){
+    super() // super() === B.prototype.constructor.call(this);
+    super.foo() // super === B.prototype
+  }
+}
+
+
+
+
