@@ -216,6 +216,3 @@ class A extends B{
     super.foo() // super === B.prototype
   }
 }
-
-
-
