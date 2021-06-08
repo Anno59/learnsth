@@ -192,27 +192,119 @@ class Baz extends Foo{
 
 new Baz() // false 返回的为子类
 
-// 继承先将父类属性与方法赋予 this，再将属性及方法赋予 this
+// 继承先将父类属性与方法赋予 this，再将子类属性及方法赋予 this
 class ColorPoint extends Point {
   constructor(x, y, color) {
-    super(x, y); // 调用父类的constructor(x, y), 必须在 this 前执行
+    super(x, y); // 调用父类的constructor(x, y), 必须在 this 前执行，执行 super 后才返回 this ；子类才能使用
     this.color = color;
   }
 
   toString() {
-    return this.color + ' ' + super.toString(); // 调用父类的toString()
+    return this.color + ' ' + super.toString(); // 调用父类 prototype 中的 toString()，而在静态方法中指向父类
   }
 }
 
 // 静态属性不能被实例继承，但能被子类继承
 
-// Object.getPrototypeOf方法可以用来从子类上获取父类
+// Object.getPrototypeOf 方法可以用来从子类上获取父类
 Object.getPrototypeOf(Foo) === Baz // true baz 为 foo 的父类
 
 // super
 class A extends B{
   constructor(){
     super() // super() === B.prototype.constructor.call(this);
-    super.foo() // super === B.prototype
+            // 该方法也只能在 constructor 中调用
+    super.foo() // super === B.prototype，且只能调用父类原型对象上的属性或者方法
   }
 }
+
+// 子类实例普通方法中通过 super 调用父类方法，方法内部的 this 指向子类实例
+class A {
+  constructor() {
+    this.x = 1;
+  }
+  print() {
+    console.log(this.x);
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    this.x = 2;
+  }
+  m() {
+    super.print(); // super.print.call(this)
+  }
+}
+
+let b = new B();
+b.m() // 2
+
+// 子类实例普通方法中通过 super 进行赋值，super 就等于子类的 this ：super === this
+class A {
+  constructor() {
+    this.x = 1;
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    this.x = 2;
+    super.x = 3;
+    console.log(super.x); // undefined
+    console.log(this.x); // 3
+  }
+}
+
+let b = new B();
+
+// 在静态方法中 super 作为对象调用时，指向父类，而不是父类的原型对象
+class Parent {
+  static myMethod(msg) {
+    console.log('static', msg);
+  }
+
+  myMethod(msg) {
+    console.log('instance', msg);
+  }
+}
+
+class Child extends Parent {
+  static myMethod(msg) {
+    super.myMethod(msg);
+  }
+
+  myMethod(msg) {
+    super.myMethod(msg);
+  }
+}
+
+Child.myMethod(1); // static 1
+
+var child = new Child();
+child.myMethod(2); // instance 2
+
+// 子类的静态方法中调用 super，this 指向的是子类而不是子类实例
+class A {
+  constructor() {
+    this.x = 1;
+  }
+  static print() {
+    console.log(this.x);
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    this.x = 2;
+  }
+  static m() {
+    super.print();
+  }
+}
+
+B.x = 3;
+B.m() // 3
