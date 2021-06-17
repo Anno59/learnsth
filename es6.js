@@ -306,6 +306,7 @@ class B extends A {
   }
 }
 
+
 B.x = 3;
 B.m() // 3
 
