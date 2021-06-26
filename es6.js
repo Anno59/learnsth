@@ -298,7 +298,7 @@ class A {
 
 class B extends A {
   constructor() {
-    super();
+    super(); // super() == A.prototype.constructor.call(this)
     this.x = 2;
   }
   static m() {
